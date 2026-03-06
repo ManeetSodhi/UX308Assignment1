@@ -36,12 +36,12 @@ let modification = "";
 
 function modifying(sInput) {
   let aReturn = [];
-  currentState = confirming
+  currentState = toppings
   if (sInput.toLowerCase().startsWith('ice')) {
-    modification = "Iced";
+    modification = "iced";
     aReturn.push(`What size would you like? (S/M/L)`);
   } else if (sInput.toLowerCase().startsWith('hot')) {
-    modification = "Hot";
+    modification = "hot";
     aReturn.push(`What size would you like? (S/M/L)`);
   } else {
     currentState = ordering;
@@ -50,22 +50,64 @@ function modifying(sInput) {
   return aReturn;
 }
 
+let size = "";
+
+function toppings(sInput) {
+  let aReturn = [];
+  currentState = upsell
+  if (sInput.toLowerCase().startsWith('s')) {
+    size = "small";
+    aReturn.push(`Which toppings would you like to add?`);
+    aReturn.push(`Select: Whipped Cream, Caramel or none`);
+  } else if (sInput.toLowerCase().startsWith('m')) {
+    size = "medium";
+    aReturn.push(`Which toppings would you like to add?`);
+    aReturn.push(`Select: Whipped Cream, Caramel or none`);
+  } else if (sInput.toLowerCase().startsWith('l')) {
+    size = "large";
+    aReturn.push(`Which toppings would you like to add?`);
+    aReturn.push(`Select: Whipped Cream, Caramel or none`);
+  } else {
+    currentState = modifying;
+    aReturn.push("Please try again");
+  }
+  return aReturn;
+}
+
+let topping = "";
+
+function upsell(sInput) {
+  let aReturn = [];
+  currentState = confirming
+  if (sInput.toLowerCase().startsWith('whipped cream')) {
+    topping = "whipped cream";
+    aReturn.push(`You ordered a ${size} ${modification} coffee with ${topping}.`);
+    aReturn.push(`Would you like to add a donut? (please answer yes/no only)`);
+  } else if (sInput.toLowerCase().startsWith('caramel')) {
+    topping = "caramel";
+    aReturn.push(`You ordered a ${size} ${modification} coffee with ${topping}.`);
+    aReturn.push(`Would you like to add a donut? (please answer yes/no only)`);
+  } else if (sInput.toLowerCase().startsWith('no')) {
+    topping = "no toppings";
+    aReturn.push(`You ordered a ${size} ${modification} coffee with ${topping}.`);
+    aReturn.push(`Would you like to add a donut? (please answer yes/no only)`);
+  } else {
+    currentState = toppings;
+    aReturn.push("Please try again");
+  }
+  return aReturn;
+}
 
 function confirming(sInput) {
   let aReturn = [];
   currentState = welcoming
-  if (sInput.toLowerCase().startsWith('s')) {
-    aReturn.push(`You ordered a Small ${modification} Coffee`);
-    aReturn.push(`Please order again!`);
-  } else if (sInput.toLowerCase().startsWith('m')) {
-    aReturn.push(`You ordered a Medium ${modification} Coffee`);
-    aReturn.push(`Please order again!`);
-  } else if (sInput.toLowerCase().startsWith('l')) {
-    aReturn.push(`You ordered a Large ${modification} Coffee`);
+  if (sInput.toLowerCase().startsWith('ye')) {
+    aReturn.push(`You ordered a ${size} ${modification} coffee with ${topping} and a donut.`);
     aReturn.push(`Please order again!`);
   } else {
-    currentState = modifying;
-    aReturn.push("Please try again");
+    currentState = welcoming;
+    aReturn.push(`You ordered a ${size} ${modification} coffee with ${topping}.`);
+    aReturn.push(`Please order again!`);
   }
   return aReturn;
 }
